@@ -1,0 +1,43 @@
+services:
+    mysql:
+        container_name: sltest_mysql
+        image: mysql:8.0
+        hostname: database
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: 'root'
+            MYSQL_ROOT_HOST: "%"
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        volumes:
+            - 'mysql_data:/var/lib/mysql'
+        networks:
+            - sltest
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-proot"]
+            retries: 3
+            timeout: 5s
+        restart: on-failure
+    app:
+        container_name: "sltest_app"
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        ports:
+            - "80:80"
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - sltest
+        depends_on:
+            - mysql     
+volumes:
+    mysql_data:
+        driver: local
+        name: sltest_mysql_data        
+networks:
+    sltest:
+        name: sltest_network
