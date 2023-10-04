@@ -38,8 +38,8 @@ RUN mv composer.phar /usr/local/bin/composer
 # Permissions
 ARG UID=1000
 ARG GID=1000
-RUN usermod -u ${UID} www-data
-RUN groupmod -g ${GID} www-data 
+RUN usermod -u ${UID} -o www-data
+RUN groupmod -g ${GID} -o www-data 
 RUN chown -R www-data:www-data /var/www
 
 # Apache

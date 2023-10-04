@@ -1,0 +1,9 @@
+#!/bin/bash
+cp .env.example .env
+sed -ri -e "s/%UID%/$(id -u)/g" .env
+sed -ri -e "s/%GID%/$(id -g)/g" .env
+docker compose up -d
+docker compose exec app composer install
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan storage:link
+docker compose exec app php artisan migrate

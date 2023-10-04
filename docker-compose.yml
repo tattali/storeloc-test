@@ -26,6 +26,9 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile
+            args:
+                UID: ${UID}
+                GID: ${GID}
         ports:
             - "80:80"
         volumes:
