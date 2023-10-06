@@ -13,4 +13,9 @@ class StorelocController extends Controller
             'services' => Service::all(),
         ]);
     }
+
+    public function results()
+    {
+        // @todo
+    }
 }
