@@ -17,7 +17,7 @@ class StoreFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => '',
+            'name' => rtrim(fake()->text(25), '.'),
             'lat' => fake()->randomFloat(null, 48.12, 49.24),
             'lng' => fake()->randomFloat(null, 1.45, 3.56),
             'address' => fake()->numberBetween(1, 100) . ' rue ' . fake()->name(),
