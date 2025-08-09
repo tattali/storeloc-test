@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use App\Models\Store;
 use Illuminate\Http\Request;
 
 class StorelocController extends Controller
@@ -54,4 +55,28 @@ class StorelocController extends Controller
         ]);
     }
 
+    public function show($id)
+    {
+        $store = Store::findOrFail($id);
+
+        $isOpen = false;
+        $currentDay = now()->format('l');
+        $currentTime = now()->format('H:i');
+        if (isset($store->hours[$currentDay])) {
+            foreach ($store->hours[$currentDay] as $timeRange) {
+                [$start, $end] = explode('-', $timeRange);
+                if ($currentTime >= $start && $currentTime <= $end) {
+                    $isOpen = true;
+                    break;
+                }
+            }
+        }
+
+
+        return view('store.show', [
+            'store' => $store,
+            'services' => $store->services,
+            'isOpen' => $isOpen,
+        ]);
+    }
 }
