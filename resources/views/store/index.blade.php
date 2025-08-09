@@ -1,5 +1,6 @@
 @extends('layout')
 @section('content')
+    <h1>Rechercher un magasin</h1>
     <form method="GET" action="{{ route('results') }}" class="form">
         <div class="bounds">
             <input type="search" name="n" placeholder="Latitude nord" />
