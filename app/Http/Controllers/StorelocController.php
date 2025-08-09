@@ -16,14 +16,6 @@ class StorelocController extends Controller
 
     public function results(Request $request)
     {
-        $bounds = [
-            'north' => $request->input('n'),
-            'south' => $request->input('s'),
-            'east'  => $request->input('e'),
-            'west'  => $request->input('w'),
-        ];
-
-        // Lire et normaliser les services
         $serviceIds = (array) $request->input('services');
         if (is_string($serviceIds)) {
             $serviceIds = explode(',', $serviceIds);
@@ -31,7 +23,22 @@ class StorelocController extends Controller
             $serviceIds = [];
         }
 
-        // Lire l’opérateur (par défaut OR)
+        $request->validate([
+            'n' => 'required|numeric',
+            's' => 'required|numeric',
+            'e' => 'required|numeric',
+            'w' => 'required|numeric',
+            'services.*' => 'required|exists:services,id',
+            'operator' => 'required|in:AND,OR',
+        ]);
+
+        $bounds = [
+            'north' => $request->input('n'),
+            'south' => $request->input('s'),
+            'east'  => $request->input('e'),
+            'west'  => $request->input('w'),
+        ];
+
         $operator = strtoupper($request->input('operator', 'OR'));
         if (!in_array($operator, ['AND', 'OR'])) {
             $operator = 'OR';
